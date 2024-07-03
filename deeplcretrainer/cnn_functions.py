@@ -613,7 +613,8 @@ def init_model(
     strategy = tf.distribute.MirroredStrategy(
         cross_device_ops=tf.distribute.HierarchicalCopyAllReduce()
     )
-    lrelu = lambda x: tf.keras.activations.relu(x, alpha=0.1, max_value=20.0)
+    #lrelu = lambda x: tf.keras.activations.relu(x, negative_slope=0.1, max_value=20.0)
+    lrelu = "leaky_relu"
 
     with strategy.scope():
         random.seed(42)

@@ -19,7 +19,6 @@ import itertools
 import os
 import tempfile
 
-import h5py
 import pandas as pd
 from psm_utils.io.peptide_record import peprec_to_proforma
 from psm_utils.psm import PSM
@@ -46,7 +45,10 @@ except ImportError:
 try:
     from deeplcretrainer import cnn_functions
 except ImportError:
-    import cnn_functions
+    try:
+        import cnn_functions
+    except:
+        pass
 
 config = ConfigProto()
 config.gpu_options.allow_growth = True
@@ -192,7 +194,7 @@ def retrain(
         )
     )
 
-    lrelu = lambda x: tf.keras.activations.relu(x, alpha=0.1, max_value=20.0)
+    #lrelu = lambda x: tf.keras.activations.relu(x, alpha=0.1, max_value=20.0)
 
     fit_hc = True
     use_correction_factor = True
@@ -332,7 +334,7 @@ def retrain(
             param_hash = hashlib.md5(",".join(map(str, p)).encode()).hexdigest()
             mod_name = os.path.join(
                 outpath,
-                "full%s_%s_%s.hdf5"
+                "full%s_%s_%s.keras"
                 % (
                     hc_str,
                     os.path.basename(dataset_name).replace(".csv", ""),
@@ -350,7 +352,7 @@ def retrain(
             elif len(matched_mod) > 0:
                 freeze_after_concat_t = int(freeze_after_concat)
                 model = load_model(
-                    h5py.File(matched_mod), custom_objects={"<lambda>": lrelu}
+                    matched_mod #, custom_objects={"<lambda>": lrelu}
                 )
 
                 if freeze_layers:
@@ -423,7 +425,7 @@ def retrain(
                 )
 
             mods_optimized.append(
-                load_model(h5py.File(mod_name), custom_objects={"<lambda>": lrelu})
+                load_model(mod_name) #, custom_objects={"<lambda>": lrelu}
             )
 
             mods_loc_optimized.append(mod_name)
