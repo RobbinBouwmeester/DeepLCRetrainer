@@ -169,6 +169,7 @@ def retrain(
     global_num_dens=[3],
     regularizer_val=[0.0000025],
     remove_repeats=True,
+    verbose=True,
     **kwargs
 ):
     if not outpath:
@@ -407,7 +408,7 @@ def retrain(
                         y_valid,
                     ),
                     epochs=n_epochs,
-                    verbose=1,
+                    verbose=int(verbose),
                     batch_size=batch_size,
                     callbacks=[mcp_save],
                     shuffle=True,
@@ -418,7 +419,7 @@ def retrain(
                     y_train,
                     validation_data=([X_valid, X_valid_sum, X_valid_global], y_valid),
                     epochs=n_epochs,
-                    verbose=1,
+                    verbose=int(verbose),
                     batch_size=batch_size,
                     callbacks=[mcp_save],
                     shuffle=True,
