@@ -14,9 +14,6 @@ __license__ = "Apache License, Version 2.0"
 __maintainer__ = ["Robbin Bouwmeester", "Ralf Gabriels"]
 __email__ = ["Robbin.Bouwmeester@ugent.be", "Ralf.Gabriels@ugent.be"]
 
-import numpy as np
-import pandas as pd
-
 import math
 import multiprocessing
 import os
@@ -24,7 +21,8 @@ import random
 import time
 
 import deeplc
-import scipy
+import numpy as np
+import pandas as pd
 import tensorflow as tf
 from deeplc.feat_extractor import FeatExtractor
 from psm_utils.io.peptide_record import peprec_to_proforma
@@ -42,8 +40,9 @@ from tensorflow.keras.layers import (
 from tensorflow.keras.models import Model
 
 try:
-    from matplotlib import pyplot as plt
     import matplotlib
+    from matplotlib import pyplot as plt
+
     matplotlib.use("Agg")
 except ImportError:
     _has_matplotlib = False
@@ -613,7 +612,7 @@ def init_model(
     strategy = tf.distribute.MirroredStrategy(
         cross_device_ops=tf.distribute.HierarchicalCopyAllReduce()
     )
-    #lrelu = lambda x: tf.keras.activations.relu(x, negative_slope=0.1, max_value=20.0)
+    # lrelu = lambda x: tf.keras.activations.relu(x, negative_slope=0.1, max_value=20.0)
     lrelu = "leaky_relu"
 
     with strategy.scope():
@@ -1145,7 +1144,7 @@ def plot_preds(
         else:
             pred_test = mods.predict([X, X_sum, X_global]).flatten() * correction_factor
 
-    corr = scipy.stats.pearsonr(y, pred_test)[0]
+    corr = np.corrcoef(y, pred_test)[0][1]
     mae = sum(abs(np.array(y) - pred_test) / len(pred_test))
 
     plt.figure(figsize=(10, 8))
