@@ -24,8 +24,13 @@ from psm_utils.io.peptide_record import peprec_to_proforma
 from psm_utils.psm import PSM
 from psm_utils.psm_list import PSMList
 from tensorflow.compat.v1 import ConfigProto, InteractiveSession
-from tensorflow.keras.callbacks import ModelCheckpoint
-from tensorflow.keras.models import load_model
+
+try:
+    from tensorflow.keras.callbacks import ModelCheckpoint
+    from tensorflow.keras.models import load_model
+except:
+    from tensorflow.python.keras.callbacks import ModelCheckpoint
+    from tensorflow.python.keras.models import load_model
 
 try:
     from gooey import Gooey, GooeyParser
@@ -195,7 +200,7 @@ def retrain(
         )
     )
 
-    #lrelu = lambda x: tf.keras.activations.relu(x, alpha=0.1, max_value=20.0)
+    # lrelu = lambda x: tf.keras.activations.relu(x, alpha=0.1, max_value=20.0)
 
     fit_hc = True
     use_correction_factor = True
@@ -352,9 +357,7 @@ def retrain(
                 continue
             elif len(matched_mod) > 0:
                 freeze_after_concat_t = int(freeze_after_concat)
-                model = load_model(
-                    matched_mod #, custom_objects={"<lambda>": lrelu}
-                )
+                model = load_model(matched_mod)  # , custom_objects={"<lambda>": lrelu}
 
                 if freeze_layers:
                     set_train_to = False
@@ -426,7 +429,7 @@ def retrain(
                 )
 
             mods_optimized.append(
-                load_model(mod_name) #, custom_objects={"<lambda>": lrelu}
+                load_model(mod_name)  # , custom_objects={"<lambda>": lrelu}
             )
 
             mods_loc_optimized.append(mod_name)

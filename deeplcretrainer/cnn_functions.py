@@ -28,16 +28,30 @@ from deeplc.feat_extractor import FeatExtractor
 from psm_utils.io.peptide_record import peprec_to_proforma
 from psm_utils.psm import PSM
 from psm_utils.psm_list import PSMList
-from tensorflow.keras import regularizers
-from tensorflow.keras.layers import (
-    Conv1D,
-    Dense,
-    Flatten,
-    Input,
-    MaxPooling1D,
-    concatenate,
-)
-from tensorflow.keras.models import Model
+
+try:
+    from tensorflow.keras import regularizers
+    from tensorflow.keras.layers import (
+        Conv1D,
+        Dense,
+        Flatten,
+        Input,
+        MaxPooling1D,
+        concatenate,
+    )
+    from tensorflow.keras.models import Model
+except:
+    from tensorflow.python.keras import regularizers
+    from tensorflow.python.keras.layers import (
+        Conv1D,
+        Dense,
+        Flatten,
+        Input,
+        MaxPooling1D,
+        concatenate,
+    )
+    from tensorflow.python.keras.models import Model
+
 
 try:
     import matplotlib
