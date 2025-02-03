@@ -393,20 +393,16 @@ def get_feat_df(
             )
         f_extractor = FeatExtractor(
             cnn_feats=True,
-            verbose=True,
             lib_path_mod=costum_modification_file,
             ignore_mods=ignore_mods,
         )
     else:
-        f_extractor = FeatExtractor(
-            cnn_feats=True, verbose=True, ignore_mods=ignore_mods
-        )
+        f_extractor = FeatExtractor(cnn_feats=True, ignore_mods=ignore_mods)
 
     pepper = deeplc.DeepLC(
         f_extractor=f_extractor,
         cnn_model=True,
         n_jobs=num_cores,
-        verbose=True,
         **kwargs,
     )
 
